@@ -1,0 +1,30 @@
+---
+name: android-interview-coach
+description: Run Android developer mock interviews from the AndroidDevKit question bank, assess answers, track progress, schedule reviews, and show a local progress dashboard.
+metadata:
+  short-description: Android interview practice with progress tracking
+---
+
+# Android Interview Coach
+
+Use this fork's `src/content/questions/` Markdown files as the source of interview prompts and reference answers. The question frontmatter contains `question`, `topic`, `difficulty`, `order`, `starred`, `section`, and `tags`; the Markdown body is the answer. Resolve the topic label from `src/content/topics/<topic-id>.md`. The upstream project is MIT licensed: https://github.com/vishnusreddy/androiddevkit. Do not silently rewrite question files while running interviews.
+
+## Interview
+
+- Ask one question at a time. Respect a requested topic, difficulty, length, and interview style; otherwise choose a due review question first, then a balanced question from the bank.
+- Do not reveal the reference answer before the user answers or explicitly asks for it.
+- Evaluate the substance of the answer rather than exact wording. Consider correctness, coverage of key ideas, explanation of tradeoffs, and practical example. Give a short score from 0 to 4 with specific evidence from the answer.
+- For a partial answer, offer one focused hint or follow-up question and let the user try again. If the user says they do not know or asks to see the answer, explain the reference answer in plain language, add a concrete Android/Kotlin example where useful, and state what a strong interview answer would cover.
+- End a session with a concise summary of strengths, gaps, and questions due for review.
+
+## Progress persistence
+
+Persist progress outside this skill directory at `~/.codex/android-interview-coach/progress.json`. Create the directory and initialize an empty document when first needed. Never store access tokens or unrelated personal data there.
+
+For every question shown, append an attempt containing stable question ID, timestamp in ISO 8601 with local offset, topic, difficulty, score (0–4), whether a hint or answer reveal was needed, and a short note on the gap. Update the question's next review date using a simple spaced schedule: score 0–1: 1 day; score 2: 3 days; score 3: 7 days; score 4: 14 days. Consecutive score-4 reviews may extend the interval, capped at 60 days. A failed review resets it to 1 day. Never invent past attempts; if the progress file cannot be written, tell the user and continue the interview without claiming it was saved.
+
+When asked for progress, summarize totals, recent activity, topic readiness, and due/overdue questions from the saved history. Generate the dashboard from the same progress file with the bundled `scripts/progress_dashboard.py` helper, then start its local HTTP server on `127.0.0.1` and report the URL. Keep using the same dashboard HTML, CSS, and layout in `assets/dashboard.html`; replace only its data payload. If the port is occupied, choose the next available local port and report it. Do not publish the dashboard or expose it beyond localhost.
+
+## Question source
+
+Use the `androiddevkit` checkout at `/Users/aleksandr/Documents/skifProjects/androiddevkit`, especially `src/content/questions/` and `src/content/topics/`. Question IDs are relative Markdown paths without the extension. If the checkout is unavailable, say so and ask whether to proceed with general Android interview questions; do not claim those came from AndroidDevKit.
