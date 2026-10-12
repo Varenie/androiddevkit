@@ -2,6 +2,7 @@
 """Render a stable local progress dashboard and serve it on localhost."""
 import argparse
 import json
+import os
 import socket
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -27,7 +28,8 @@ def free_port(start: int) -> int:
 def main() -> None:
     root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data", type=Path, default=Path.home() / ".codex/android-interview-coach/progress.json")
+    default_data_root = Path(os.environ.get("ANDROID_INTERVIEW_DATA_DIR", Path.home() / "Documents/skifProjects/android-interview-coach-data"))
+    parser.add_argument("--data", type=Path, default=default_data_root / "progress.json")
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args()
     html = render(root / "assets/dashboard.html", args.data)
