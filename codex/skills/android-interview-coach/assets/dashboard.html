@@ -5,41 +5,120 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Прогресс подготовки к Android-собеседованию</title>
   <style>
-    :root { color-scheme: light; --ink:#192433; --muted:#68778a; --line:#dce3eb; --surface:#fff; --canvas:#f3f6fa; --accent:#3569d4; --good:#16845b; --warn:#b66a12; }
+    :root { color-scheme:light; --ink:#192433; --muted:#68778a; --line:#dce3eb; --surface:#fff; --canvas:#f3f6fa; --accent:#3569d4; --accent-soft:#eaf0ff; --good:#16845b; --warn:#b66a12; --shadow:0 8px 24px rgba(30,49,76,.045) }
     * { box-sizing:border-box }
     body { margin:0; background:var(--canvas); color:var(--ink); font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif }
-    main { max-width:1040px; margin:0 auto; padding:40px 24px 64px }
-    h1 { margin:0 0 6px; font-size:30px; letter-spacing:-.03em }
-    h2 { margin:0 0 16px; font-size:19px }
+    main { max-width:1120px; margin:0 auto; padding:38px 24px 64px }
+    h1 { margin:0 0 5px; font-size:30px; line-height:1.2; letter-spacing:-.035em }
+    h2 { margin:0 0 16px; font-size:18px; letter-spacing:-.015em }
+    p { margin:0 }
     .subtitle,.muted { color:var(--muted) }
-    .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:28px 0 }
-    .card,section { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px }
-    .metric { font-size:28px; font-weight:700; letter-spacing:-.03em }
-    .label { color:var(--muted); font-size:13px }
-    section { margin:16px 0 }
-    .topic { display:grid; grid-template-columns: minmax(150px,1fr) 2fr 52px; align-items:center; gap:14px; margin:12px 0 }
-    progress { width:100%; height:9px; accent-color:var(--accent) }
-    table { width:100%; border-collapse:collapse; font-size:14px }
-    th,td { text-align:left; padding:11px 9px; border-bottom:1px solid var(--line); vertical-align:top }
-    th { color:var(--muted); font-size:12px; font-weight:600 }
+    .header { display:flex; justify-content:space-between; align-items:end; gap:20px }
+    .header-note { color:var(--muted); font-size:13px; text-align:right }
+    .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:25px 0 16px }
+    .card,section { min-width:0; background:var(--surface); border:1px solid var(--line); border-radius:15px; padding:19px; box-shadow:var(--shadow) }
+    .metric { font-size:28px; font-weight:750; line-height:1.15; letter-spacing:-.035em; font-variant-numeric:tabular-nums }
+    .label { margin-top:7px; color:var(--muted); font-size:13px }
+    .content-grid { display:grid; grid-template-columns:1.25fr .75fr; gap:15px; margin:15px 0 }
+    section { margin:15px 0 }
+    .content-grid section { margin:0 }
+    .chart { width:100%; height:auto; display:block; overflow:visible }
+    .chart text { fill:var(--muted); font:11px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif }
+    .gridline { stroke:var(--line); stroke-width:1 }
+    .trend-line { fill:none; stroke:var(--accent); stroke-width:3; stroke-linecap:round; stroke-linejoin:round }
+    .trend-dot { fill:var(--surface); stroke:var(--accent); stroke-width:2.5 }
+    .topic { display:grid; grid-template-columns:minmax(120px,1fr) 1.5fr 44px; align-items:center; gap:12px; margin:13px 0 }
+    .topic-name { overflow-wrap:anywhere; font-size:13px }
+    .track { height:9px; background:#edf1f6; border-radius:99px; overflow:hidden }
+    .fill { height:100%; background:var(--accent); border-radius:inherit }
+    .topic-score { text-align:right; font-size:13px; font-variant-numeric:tabular-nums }
+    .score-row { display:grid; grid-template-columns:30px 1fr 28px; align-items:center; gap:10px; margin:12px 0 }
+    .score-row .track { height:10px }
+    .score-row:nth-child(2) .fill { background:#bf554a }
+    .score-row:nth-child(3) .fill { background:#c57b2c }
+    .score-row:nth-child(4) .fill { background:#b49a2c }
+    .score-row:nth-child(5) .fill { background:#5f9a63 }
+    .score-row:nth-child(6) .fill { background:var(--accent) }
+    .game-panel { display:grid; grid-template-columns:210px 1fr; gap:22px; align-items:center }
+    .level-box { padding:16px; background:var(--accent-soft); border-radius:12px }
+    .level-top { display:flex; align-items:center; justify-content:space-between; gap:8px }
+    .level-number { font-size:24px; font-weight:750 }
+    .xp { color:var(--accent); font-size:13px; font-weight:700 }
+    .level-box .track { margin:12px 0 7px; background:#d7e2fc }
+    .level-box .fill { background:var(--accent) }
+    .badges { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px }
+    .badge { min-height:112px; padding:13px; border:1px solid var(--line); border-radius:12px; background:#fff }
+    .badge.locked { background:#f8f9fb; color:#8591a1 }
+    .badge-icon { font-size:22px; line-height:1 }
+    .badge-title { margin:9px 0 3px; font-size:13px; font-weight:700 }
+    .badge-progress { color:var(--muted); font-size:11px }
+    table { width:100%; border-collapse:collapse; font-size:13px }
+    th,td { padding:10px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top }
+    th { color:var(--muted); font-size:11px; font-weight:650; letter-spacing:.02em }
     .pill { display:inline-block; padding:2px 9px; border-radius:99px; background:#edf2fa; white-space:nowrap }
     .overdue { color:#a34435; background:#fff0ed }
-    @media(max-width:700px) { main{padding:24px 14px}.grid{grid-template-columns:repeat(2,1fr)}.topic{grid-template-columns:1fr 2fr 42px}table{font-size:12px}th,td{padding:8px 4px} }
+    .empty { padding:20px 0 5px; color:var(--muted); font-size:13px }
+    @media(max-width:760px) { main{padding:26px 16px 48px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.content-grid{grid-template-columns:1fr}.game-panel{grid-template-columns:1fr}.badges{grid-template-columns:repeat(2,minmax(0,1fr))} }
+    @media(max-width:440px) { main{padding:22px 12px 36px}h1{font-size:25px}.header{align-items:start;flex-direction:column}.header-note{text-align:left}.grid{gap:9px}.card,section{padding:15px}.metric{font-size:24px}.topic{grid-template-columns:minmax(90px,1fr) 1fr 38px;gap:8px}.badges{gap:8px}table{font-size:11px}th,td{padding:8px 4px} }
   </style>
 </head>
 <body>
 <main id="app"></main>
 <script>
 const data = __PROGRESS_DATA__;
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const attempts = data.attempts || [];
+const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const attempts = [...(data.attempts || [])].sort((a,b) => new Date(a.asked_at)-new Date(b.asked_at));
+const questions = data.questions || {};
+const topics = data.topics || {};
 const unique = new Set(attempts.map(a => a.question_id));
-const due = Object.entries(data.questions || {}).filter(([,q]) => q.next_review && new Date(q.next_review) <= new Date()).length;
-const avg = attempts.length ? (attempts.reduce((n,a) => n + Number(a.score || 0),0)/attempts.length).toFixed(1) : '—';
-const topicRows = Object.entries(data.topics || {}).sort((a,b) => a[0].localeCompare(b[0],'ru')).map(([name,t]) => `<div class="topic"><strong>${esc(name)}</strong><progress max="100" value="${Math.max(0,Math.min(100,Number(t.readiness || 0)))}"></progress><span>${Math.round(Number(t.readiness || 0))}%</span></div>`).join('') || '<p class="muted">Пока нет данных по темам.</p>';
-const recent = [...attempts].sort((a,b) => new Date(b.asked_at)-new Date(a.asked_at)).slice(0,20).map(a => `<tr><td>${new Date(a.asked_at).toLocaleString('ru-RU')}</td><td>${esc(a.question_id)}</td><td>${esc(a.topic)}</td><td>${esc(a.score)}/4</td><td>${esc(a.note)}</td></tr>`).join('');
-const dueRows = Object.entries(data.questions || {}).filter(([,q]) => q.next_review).sort((a,b) => new Date(a[1].next_review)-new Date(b[1].next_review)).slice(0,30).map(([id,q]) => `<tr><td>${esc(id)}</td><td>${esc(q.topic)}</td><td><span class="pill ${new Date(q.next_review)<=new Date()?'overdue':''}">${new Date(q.next_review).toLocaleDateString('ru-RU')}</span></td><td>${esc(q.last_score ?? '—')}/4</td></tr>`).join('');
-document.querySelector('#app').innerHTML = `<h1>Подготовка к Android-собеседованию</h1><div class="subtitle">Обновлено ${new Date().toLocaleString('ru-RU')}</div><div class="grid"><div class="card"><div class="metric">${unique.size}</div><div class="label">вопросов изучено</div></div><div class="card"><div class="metric">${attempts.length}</div><div class="label">попыток</div></div><div class="card"><div class="metric">${avg}</div><div class="label">средняя оценка из 4</div></div><div class="card"><div class="metric">${due}</div><div class="label">пора повторить</div></div></div><section><h2>Готовность по темам</h2>${topicRows}</section><section><h2>Повторение</h2>${dueRows?`<table><thead><tr><th>Вопрос</th><th>Тема</th><th>Повторить</th><th>Последняя оценка</th></tr></thead><tbody>${dueRows}</tbody></table>`:'<p class="muted">Расписание повторений появится после первых ответов.</p>'}</section><section><h2>Последние ответы</h2>${recent?`<table><thead><tr><th>Когда</th><th>ID вопроса</th><th>Тема</th><th>Оценка</th><th>Комментарий</th></tr></thead><tbody>${recent}</tbody></table>`:'<p class="muted">Попыток пока нет.</p>'}</section>`;
+const due = Object.entries(questions).filter(([,q]) => q.next_review && new Date(q.next_review) <= new Date()).length;
+const average = attempts.length ? (attempts.reduce((sum,a) => sum + Number(a.score || 0),0)/attempts.length).toFixed(1) : '—';
+const xp = attempts.reduce((sum,a) => sum + Math.max(0,Number(a.score || 0))*10,0);
+const level = Math.floor(xp/100)+1;
+const levelProgress = xp%100;
+const activeDays = [...new Set(attempts.map(a => String(a.asked_at || '').slice(0,10)).filter(Boolean))].sort();
+const longestStreak = (() => { let best=0, run=0, previous=null; for (const day of activeDays) { const date=new Date(`${day}T12:00:00`); const ordinal=Math.floor(date.getTime()/86400000); run=previous!==null&&ordinal-previous===1?run+1:1; best=Math.max(best,run); previous=ordinal; } return best; })();
+const strongAnswers = attempts.filter(a => Number(a.score)>=3).length;
+const distinctTopics = new Set(attempts.map(a=>a.topic)).size;
+const attemptCounts = attempts.reduce((counts,a)=>counts.set(a.question_id,(counts.get(a.question_id)||0)+1),new Map());
+const repeated = [...attemptCounts.values()].some(count=>count>=2);
+const achievementList = [
+  {icon:'🌱',title:'Первый ответ',progress:`${Math.min(attempts.length,1)} / 1`,unlocked:attempts.length>=1,target:1,value:Math.min(attempts.length,1)},
+  {icon:'🧭',title:'Исследователь тем',progress:`${Math.min(distinctTopics,3)} / 3 темы`,unlocked:distinctTopics>=3,target:3,value:Math.min(distinctTopics,3)},
+  {icon:'🔥',title:'Серия занятий',progress:`${Math.min(longestStreak,3)} / 3 дня`,unlocked:longestStreak>=3,target:3,value:Math.min(longestStreak,3)},
+  {icon:'🎯',title:'Точные ответы',progress:`${Math.min(strongAnswers,5)} / 5 ответов`,unlocked:strongAnswers>=5,target:5,value:Math.min(strongAnswers,5)},
+  {icon:'🔁',title:'Повторение',progress:repeated?'Вопрос повторён':'Пройди вопрос ещё раз',unlocked:repeated,target:1,value:repeated?1:0}
+];
+const topicRows = Object.entries(topics).sort((a,b)=>a[0].localeCompare(b[0],'ru')).map(([name,t])=>`<div class="topic"><strong class="topic-name">${esc(name)}</strong><div class="track" role="progressbar" aria-label="Готовность: ${esc(name)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(Number(t.readiness||0))}"><div class="fill" style="width:${Math.max(0,Math.min(100,Number(t.readiness||0)))}%"></div></div><span class="topic-score">${Math.round(Number(t.readiness||0))}%</span></div>`).join('') || '<p class="empty">Пока нет оценок по темам.</p>';
+const scoreCounts = [0,1,2,3,4].map(score=>attempts.filter(a=>Number(a.score)===score).length);
+const scoreRows = scoreCounts.map((count,score)=>`<div class="score-row"><span>${score}/4</span><div class="track"><div class="fill" style="width:${attempts.length?count/attempts.length*100:0}%"></div></div><span>${count}</span></div>`).join('');
+const trendAttempts = attempts.slice(-12);
+const trend = (()=>{
+  if (!trendAttempts.length) return '<p class="empty">График появится после первых ответов.</p>';
+  const left=36,right=390,top=15,bottom=112,width=right-left,height=bottom-top;
+  const pts=trendAttempts.map((a,i)=>({x:trendAttempts.length===1?(left+right)/2:left+i*width/(trendAttempts.length-1),y:bottom-Number(a.score||0)/4*height,score:Number(a.score||0),date:new Date(a.asked_at).toLocaleDateString('ru-RU',{day:'numeric',month:'short'})}));
+  const path=pts.map((p,i)=>`${i?'L':'M'} ${p.x} ${p.y}`).join(' ');
+  const grid=[0,1,2,3,4].map(score=>{const y=bottom-score/4*height;return `<line class="gridline" x1="${left}" y1="${y}" x2="${right}" y2="${y}"/><text x="4" y="${y+4}">${score}</text>`}).join('');
+  const dots=pts.map(p=>`<circle class="trend-dot" cx="${p.x}" cy="${p.y}" r="4"><title>${p.date}: ${p.score}/4</title></circle>`).join('');
+  const labels=pts.filter((_,i)=>i===0||i===pts.length-1||i===Math.floor(pts.length/2)).map(p=>`<text x="${p.x}" y="137" text-anchor="middle">${esc(p.date)}</text>`).join('');
+  return `<svg class="chart" viewBox="0 0 400 145" role="img" aria-label="Оценки за последние ${pts.length} ответов по шкале от 0 до 4">${grid}<path class="trend-line" d="${path}"/>${dots}${labels}</svg>`;
+})();
+const badges = achievementList.map(b=>`<article class="badge ${b.unlocked?'':'locked'}"><div class="badge-icon" aria-hidden="true">${b.icon}</div><div class="badge-title">${esc(b.title)}</div><div class="badge-progress">${esc(b.progress)}</div>${!b.unlocked&&b.target>1?`<div class="track" style="margin-top:8px;height:5px"><div class="fill" style="width:${b.value/b.target*100}%"></div></div>`:''}</article>`).join('');
+const recent = [...attempts].reverse().slice(0,12).map(a=>`<tr><td>${new Date(a.asked_at).toLocaleString('ru-RU')}</td><td>${esc(a.question_id)}</td><td>${esc(a.topic)}</td><td>${esc(a.score)}/4</td><td>${esc(a.note)}</td></tr>`).join('');
+const dueRows = Object.entries(questions).filter(([,q])=>q.next_review).sort((a,b)=>new Date(a[1].next_review)-new Date(b[1].next_review)).slice(0,20).map(([id,q])=>`<tr><td>${esc(id)}</td><td>${esc(q.topic)}</td><td><span class="pill ${new Date(q.next_review)<=new Date()?'overdue':''}">${new Date(q.next_review).toLocaleDateString('ru-RU')}</span></td><td>${esc(q.last_score??'—')}/4</td></tr>`).join('');
+document.querySelector('#app').innerHTML = `
+  <header class="header"><div><h1>Подготовка к Android-собеседованию</h1><div class="subtitle">Прогресс и повторение вопросов</div></div><div class="header-note">Обновлено ${new Date().toLocaleString('ru-RU')}</div></header>
+  <div class="grid">
+    <div class="card"><div class="metric">${unique.size}</div><div class="label">вопросов изучено</div></div>
+    <div class="card"><div class="metric">${attempts.length}</div><div class="label">попыток</div></div>
+    <div class="card"><div class="metric">${average}</div><div class="label">средняя оценка из 4</div></div>
+    <div class="card"><div class="metric">${due}</div><div class="label">пора повторить</div></div>
+  </div>
+  <div class="content-grid"><section><h2>Динамика оценок</h2>${trend}<div class="muted" style="font-size:12px;margin-top:4px">Последние ${trendAttempts.length} ответов · шкала 0–4</div></section><section><h2>Распределение оценок</h2>${scoreRows}</section></div>
+  <section><h2>Готовность по темам</h2>${topicRows}</section>
+  <section><h2>Достижения</h2><div class="game-panel"><div class="level-box"><div class="level-top"><span class="level-number">Уровень ${level}</span><span class="xp">${xp} XP</span></div><div class="track" role="progressbar" aria-label="Опыт до следующего уровня" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${levelProgress}"><div class="fill" style="width:${levelProgress}%"></div></div><div class="muted" style="font-size:12px">${100-levelProgress} XP до уровня ${level+1}</div></div><div class="badges">${badges}</div></div></section>
+  <section><h2>Расписание повторений</h2>${dueRows?`<table><thead><tr><th>Вопрос</th><th>Тема</th><th>Повторить</th><th>Последняя оценка</th></tr></thead><tbody>${dueRows}</tbody></table>`:'<p class="empty">Расписание появится после первых ответов.</p>'}</section>
+  <section><h2>Последние ответы</h2>${recent?`<table><thead><tr><th>Когда</th><th>Вопрос</th><th>Тема</th><th>Оценка</th><th>Комментарий</th></tr></thead><tbody>${recent}</tbody></table>`:'<p class="empty">Попыток пока нет.</p>'}</section>`;
 </script>
 </body>
 </html>

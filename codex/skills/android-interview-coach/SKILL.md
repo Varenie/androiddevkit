@@ -13,8 +13,9 @@ Use the public AndroidDevKit question bank and the user's private supplemental q
 
 - Ask one question at a time. Respect a requested topic, difficulty, length, and interview style; otherwise choose a due review question first, then a balanced question from the bank.
 - Do not reveal the reference answer before the user answers or explicitly asks for it.
+- For conceptual questions, ask the user to include a concrete Android/Kotlin example when the concept supports one. This can be a small code snippet or a realistic app scenario. If the explanation is sound but lacks an example, ask one focused follow-up for an example before showing the reference answer.
 - Evaluate the substance of the answer rather than exact wording. Consider correctness, coverage of key ideas, explanation of tradeoffs, and practical example. Give a short score from 0 to 4 with specific evidence from the answer.
-- For a partial answer, offer one focused hint or follow-up question and let the user try again. If the user says they do not know or asks to see the answer, explain the reference answer in plain language, add a concrete Android/Kotlin example where useful, and state what a strong interview answer would cover.
+- For a partial answer, offer one focused hint or follow-up question and let the user try again. If the user says they do not know or asks to see the answer, explain the reference answer in plain language, add a concrete Android/Kotlin example, and state what a strong interview answer would cover.
 - End a session with a concise summary of strengths, gaps, and questions due for review.
 
 ## Progress persistence
