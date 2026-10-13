@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Прогресс подготовки к Android-собеседованию</title>
   <style>
-    :root { color-scheme:light; --ink:#192433; --muted:#68778a; --line:#dce3eb; --surface:#fff; --canvas:#f3f6fa; --accent:#3569d4; --accent-soft:#eaf0ff; --good:#16845b; --warn:#b66a12; --shadow:0 8px 24px rgba(30,49,76,.045) }
+    :root { color-scheme:light; --ink:#192433; --muted:#68778a; --line:#dce3eb; --surface:#fff; --canvas:#f3f6fa; --accent:#3569d4; --accent-soft:#eaf0ff; --track:#edf1f6; --level-track:#d7e2fc; --badge-locked:#f8f9fb; --badge-locked-ink:#8591a1; --pill:#edf2fa; --overdue-bg:#fff0ed; --shadow:0 8px 24px rgba(30,49,76,.045) }
+    :root[data-theme="dark"] { color-scheme:dark; --ink:#e7edf6; --muted:#9aa9bd; --line:#303d50; --surface:#1b2635; --canvas:#111925; --accent:#8eafff; --accent-soft:#233451; --track:#2b384a; --level-track:#344765; --badge-locked:#17212f; --badge-locked-ink:#8090a5; --pill:#29374a; --overdue-bg:#482b2d; --shadow:0 8px 24px rgba(0,0,0,.16) }
     * { box-sizing:border-box }
     body { margin:0; background:var(--canvas); color:var(--ink); font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif }
     main { max-width:1120px; margin:0 auto; padding:38px 24px 64px }
@@ -15,6 +16,10 @@
     .subtitle,.muted { color:var(--muted) }
     .header { display:flex; justify-content:space-between; align-items:end; gap:20px }
     .header-note { color:var(--muted); font-size:13px; text-align:right }
+    .header-actions { display:flex; align-items:center; gap:14px }
+    .theme-toggle { padding:8px 12px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink); font:inherit; font-size:13px; cursor:pointer }
+    .theme-toggle:hover { border-color:var(--accent) }
+    .theme-toggle:focus-visible { outline:2px solid var(--accent); outline-offset:2px }
     .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:25px 0 16px }
     .card,section { min-width:0; background:var(--surface); border:1px solid var(--line); border-radius:15px; padding:19px; box-shadow:var(--shadow) }
     .metric { font-size:28px; font-weight:750; line-height:1.15; letter-spacing:-.035em; font-variant-numeric:tabular-nums }
@@ -29,7 +34,7 @@
     .trend-dot { fill:var(--surface); stroke:var(--accent); stroke-width:2.5 }
     .topic { display:grid; grid-template-columns:minmax(120px,1fr) 1.5fr 44px; align-items:center; gap:12px; margin:13px 0 }
     .topic-name { overflow-wrap:anywhere; font-size:13px }
-    .track { height:9px; background:#edf1f6; border-radius:99px; overflow:hidden }
+    .track { height:9px; background:var(--track); border-radius:99px; overflow:hidden }
     .fill { height:100%; background:var(--accent); border-radius:inherit }
     .topic-score { text-align:right; font-size:13px; font-variant-numeric:tabular-nums }
     .score-row { display:grid; grid-template-columns:30px 1fr 28px; align-items:center; gap:10px; margin:12px 0 }
@@ -44,19 +49,19 @@
     .level-top { display:flex; align-items:center; justify-content:space-between; gap:8px }
     .level-number { font-size:24px; font-weight:750 }
     .xp { color:var(--accent); font-size:13px; font-weight:700 }
-    .level-box .track { margin:12px 0 7px; background:#d7e2fc }
+    .level-box .track { margin:12px 0 7px; background:var(--level-track) }
     .level-box .fill { background:var(--accent) }
     .badges { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px }
-    .badge { min-height:112px; padding:13px; border:1px solid var(--line); border-radius:12px; background:#fff }
-    .badge.locked { background:#f8f9fb; color:#8591a1 }
+    .badge { min-height:112px; padding:13px; border:1px solid var(--line); border-radius:12px; background:var(--surface) }
+    .badge.locked { background:var(--badge-locked); color:var(--badge-locked-ink) }
     .badge-icon { font-size:22px; line-height:1 }
     .badge-title { margin:9px 0 3px; font-size:13px; font-weight:700 }
     .badge-progress { color:var(--muted); font-size:11px }
     table { width:100%; border-collapse:collapse; font-size:13px }
     th,td { padding:10px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top }
     th { color:var(--muted); font-size:11px; font-weight:650; letter-spacing:.02em }
-    .pill { display:inline-block; padding:2px 9px; border-radius:99px; background:#edf2fa; white-space:nowrap }
-    .overdue { color:#a34435; background:#fff0ed }
+    .pill { display:inline-block; padding:2px 9px; border-radius:99px; background:var(--pill); white-space:nowrap }
+    .overdue { color:#f08f82; background:var(--overdue-bg) }
     .empty { padding:20px 0 5px; color:var(--muted); font-size:13px }
     @media(max-width:760px) { main{padding:26px 16px 48px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.content-grid{grid-template-columns:1fr}.game-panel{grid-template-columns:1fr}.badges{grid-template-columns:repeat(2,minmax(0,1fr))} }
     @media(max-width:440px) { main{padding:22px 12px 36px}h1{font-size:25px}.header{align-items:start;flex-direction:column}.header-note{text-align:left}.grid{gap:9px}.card,section{padding:15px}.metric{font-size:24px}.topic{grid-template-columns:minmax(90px,1fr) 1fr 38px;gap:8px}.badges{gap:8px}table{font-size:11px}th,td{padding:8px 4px} }
@@ -66,6 +71,9 @@
 <main id="app"></main>
 <script>
 const data = __PROGRESS_DATA__;
+const themeKey = 'android-coach-theme';
+const savedTheme = localStorage.getItem(themeKey);
+document.documentElement.dataset.theme = savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const attempts = [...(data.attempts || [])].sort((a,b) => new Date(a.asked_at)-new Date(b.asked_at));
 const questions = data.questions || {};
@@ -107,7 +115,7 @@ const badges = achievementList.map(b=>`<article class="badge ${b.unlocked?'':'lo
 const recent = [...attempts].reverse().slice(0,12).map(a=>`<tr><td>${new Date(a.asked_at).toLocaleString('ru-RU')}</td><td>${esc(a.question_id)}</td><td>${esc(a.topic)}</td><td>${esc(a.score)}/4</td><td>${esc(a.note)}</td></tr>`).join('');
 const dueRows = Object.entries(questions).filter(([,q])=>q.next_review).sort((a,b)=>new Date(a[1].next_review)-new Date(b[1].next_review)).slice(0,20).map(([id,q])=>`<tr><td>${esc(id)}</td><td>${esc(q.topic)}</td><td><span class="pill ${new Date(q.next_review)<=new Date()?'overdue':''}">${new Date(q.next_review).toLocaleDateString('ru-RU')}</span></td><td>${esc(q.last_score??'—')}/4</td></tr>`).join('');
 document.querySelector('#app').innerHTML = `
-  <header class="header"><div><h1>Подготовка к Android-собеседованию</h1><div class="subtitle">Прогресс и повторение вопросов</div></div><div class="header-note">Обновлено ${new Date().toLocaleString('ru-RU')}</div></header>
+  <header class="header"><div><h1>Подготовка к Android-собеседованию</h1><div class="subtitle">Прогресс и повторение вопросов</div></div><div class="header-actions"><button class="theme-toggle" type="button" aria-label="Переключить тему"></button><div class="header-note">Обновлено ${new Date().toLocaleString('ru-RU')}</div></div></header>
   <div class="grid">
     <div class="card"><div class="metric">${unique.size}</div><div class="label">вопросов изучено</div></div>
     <div class="card"><div class="metric">${attempts.length}</div><div class="label">попыток</div></div>
@@ -119,6 +127,10 @@ document.querySelector('#app').innerHTML = `
   <section><h2>Достижения</h2><div class="game-panel"><div class="level-box"><div class="level-top"><span class="level-number">Уровень ${level}</span><span class="xp">${xp} XP</span></div><div class="track" role="progressbar" aria-label="Опыт до следующего уровня" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${levelProgress}"><div class="fill" style="width:${levelProgress}%"></div></div><div class="muted" style="font-size:12px">${100-levelProgress} XP до уровня ${level+1}</div></div><div class="badges">${badges}</div></div></section>
   <section><h2>Расписание повторений</h2>${dueRows?`<table><thead><tr><th>Вопрос</th><th>Тема</th><th>Повторить</th><th>Последняя оценка</th></tr></thead><tbody>${dueRows}</tbody></table>`:'<p class="empty">Расписание появится после первых ответов.</p>'}</section>
   <section><h2>Последние ответы</h2>${recent?`<table><thead><tr><th>Когда</th><th>Вопрос</th><th>Тема</th><th>Оценка</th><th>Комментарий</th></tr></thead><tbody>${recent}</tbody></table>`:'<p class="empty">Попыток пока нет.</p>'}</section>`;
+const themeButton = document.querySelector('.theme-toggle');
+const updateThemeButton = () => { const dark = document.documentElement.dataset.theme === 'dark'; themeButton.textContent = dark ? '☀️ Светлая тема' : '🌙 Тёмная тема'; themeButton.setAttribute('aria-pressed', String(dark)); };
+updateThemeButton();
+themeButton.addEventListener('click', () => { const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next; localStorage.setItem(themeKey, next); updateThemeButton(); });
 </script>
 </body>
 </html>
